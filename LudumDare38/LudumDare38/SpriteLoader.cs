@@ -38,9 +38,12 @@ namespace LudumDare38
         public void LoadSprites(ContentManager content)
         {
             //Add the sprites to the dictionary
-            Sprites.Add("world", content.Load<Texture2D>("Planet"));
+            Sprites.Add("planet", content.Load<Texture2D>("Planet"));
             Sprites.Add("circle", content.Load<Texture2D>("Circle"));
             Sprites.Add("spaceship", content.Load<Texture2D>("Spaceship"));
+            Sprites.Add("maxSpeed", content.Load<Texture2D>("MaxSpeed"));
+            Sprites.Add("speedBoost", content.Load<Texture2D>("SpeedBoost"));
+            Sprites.Add("stopBoost", content.Load<Texture2D>("StopBoost"));
         }
     }
 }

@@ -16,13 +16,13 @@ namespace LudumDare38
         //The ring number
         //The size of the ring
         public int ringNumber { get; set; }
-        public int scale { get; set; }
+        public int size { get; set; }
 
         public Ring(int ringNum, int ringAmount)
         {
             //Set the ring number and the scale
             ringNumber = ringNum;
-            scale = (int)(spriteLoader.WindowSize.Y / (ringAmount + .3f)) * ringNum;
+            size = (int)(spriteLoader.WindowSize.Y / (ringAmount + .3f)) * ringNum;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -32,7 +32,12 @@ namespace LudumDare38
             int centerY = (int)spriteLoader.WindowSize.Y / 2;
 
             //Draw the ring
-            spriteBatch.Draw(spriteLoader.Sprites["circle"], new Rectangle(centerX - scale / 2, centerY - scale / 2, scale, scale), Color.White);
+            spriteBatch.Draw(spriteLoader.Sprites["circle"], new Rectangle(centerX - size / 2, centerY - size / 2, size, size), Color.White);
+
+            if (ringNumber == 1)
+            {
+                spriteBatch.Draw(spriteLoader.Sprites["planet"], new Rectangle(centerX - size / 4, centerY - size / 4, size / 2, size / 2), Color.White);
+            }
         }
     }
 }
