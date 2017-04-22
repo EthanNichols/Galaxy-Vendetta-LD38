@@ -86,10 +86,12 @@ namespace LudumDare38
                     switch (boost)
                     {
                         case BoostType.maxSpeed:
-                            spaceship.maxSpeed += .1f;
+                            spaceship.maxSpeed += .3f;
+                            spaceship.points += 30;
                             break;
                         case BoostType.speedBoost:
-                            spaceship.currentSpeed *= 5;
+                            spaceship.currentSpeed += spaceship.maxSpeed;
+                            spaceship.points += 10;
                             break;
                         case BoostType.stop:
                             spaceship.currentSpeed = -.2f;

@@ -12,6 +12,7 @@ namespace LudumDare38
     class Spaceship
     {
         //The position and size of the spaceship
+        public int shipNumber { get; set; }
         public Rectangle rectangle { get; set; }
         public bool active { get; set; }
 
@@ -19,6 +20,7 @@ namespace LudumDare38
         //The ring that the spaceship it on
         //The speed the spaceship is going
         public float rotation { get; set; }
+        public float prevRotation { get; set; }
         public int currentRing { get; set; }
         public int movementRing { get; set; }
         public float offset { get; set; }
@@ -41,11 +43,12 @@ namespace LudumDare38
         public Spaceship(List<Ring> rings, int spaceshipNum, int spaceships)
         {
             //Set information about the spaceship
+            shipNumber = spaceshipNum;
             rotation = (360 / spaceships) * spaceshipNum;
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 1;
+            maxSpeed = 3;
             points = 0;
             active = true;
 
@@ -59,19 +62,25 @@ namespace LudumDare38
                     color = new Color(255, 0, 0);
                     break;
                 case 2:
-                    color = new Color(255, 255, 0);
+                    color = new Color(255, 125, 125);
                     break;
                 case 3:
-                    color = new Color(0, 255, 0);
+                    color = new Color(125, 255, 125);
                     break;
                 case 4:
-                    color = new Color(0, 255, 255);
+                    color = new Color(255, 0, 255);
                     break;
                 case 5:
-                    color = new Color(0, 0, 255);
+                    color = new Color(125, 255, 0);
                     break;
                 case 6:
                     color = new Color(255, 255, 255);
+                    break;
+                case 7:
+                    color = new Color(125, 125, 255);
+                    break;
+                case 8:
+                    color = new Color(0, 0, 255);
                     break;
             }
         }
@@ -93,13 +102,15 @@ namespace LudumDare38
                 {
                     //Test for the spaceship with more rotation
                     //Deactivate the spaceship that is in front
-                    if (rotation > spaceship.rotation)
+                    if (prevRotation > spaceship.rotation)
                     {
                         active = false;
+                        spaceship.points += (int)Math.Abs(spaceship.currentSpeed * 100);
                     }
                     else
                     {
                         spaceship.active = false;
+                        points += (int)Math.Abs(currentSpeed * 100);
                     }
                 }
             }
@@ -151,6 +162,7 @@ namespace LudumDare38
 
             //TEMPERARY
             //Increase the rotation location of the spaceship
+            prevRotation = rotation;
             rotation += currentSpeed / currentRing;
 
             //TEMPERARY
@@ -162,19 +174,14 @@ namespace LudumDare38
 
             //Test the current speed relative to the max speed
             //Increase/Decrease the current speed towards the max speed
-            if (currentSpeed < maxSpeed)
+            if (currentSpeed < maxSpeed - .2f)
             {
                 currentSpeed += .1f;
             }
-            else if (currentSpeed > maxSpeed)
+            else if (currentSpeed > maxSpeed + .2f)
             {
-                currentSpeed /= (maxSpeed + .1f);
-            }
-
-            //If the current speed is relativly close to the max speed
-            //Set the current speed to the max speed
-            else if (currentSpeed + .06f > maxSpeed ||
-                currentSpeed - .06f < maxSpeed)
+                currentSpeed -= .4f;
+            }else
             {
                 currentSpeed = maxSpeed;
             }

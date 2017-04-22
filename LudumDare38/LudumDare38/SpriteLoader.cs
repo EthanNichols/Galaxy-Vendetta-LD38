@@ -18,7 +18,9 @@ namespace LudumDare38
         //The size of thw indow
         public Dictionary<string, Texture2D> Sprites = new Dictionary<string, Texture2D>();
         public Vector2 WindowSize;
-        
+
+        public SpriteFont font;
+
         private SpriteLoader()
         {
         }
@@ -45,6 +47,9 @@ namespace LudumDare38
             Sprites.Add("speedBoost", content.Load<Texture2D>("SpeedBoost"));
             Sprites.Add("stopBoost", content.Load<Texture2D>("StopBoost"));
             Sprites.Add("starAnimation", content.Load<Texture2D>("StarAnimation"));
+            Sprites.Add("playerInfo", content.Load<Texture2D>("PlayerInfo"));
+
+            font = content.Load<SpriteFont>("ScienceFair");
         }
     }
 }

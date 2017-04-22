@@ -21,6 +21,7 @@ namespace LudumDare38
         //The spaceships that are playing
         List<Ring> rings = new List<Ring>();
         List<Spaceship> spaceships = new List<Spaceship>();
+        List<Indicator> indicators = new List<Indicator>();
 
         //List of boosts on the map
         //The amount of time between boosts spawning
@@ -38,7 +39,7 @@ namespace LudumDare38
             //Set the screen size
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
@@ -67,11 +68,19 @@ namespace LudumDare38
 
             //REMOVE THIS!!!
             //Create a temperary spaceship
-            spaceships.Add(new Spaceship(rings, 1, 5));
-            spaceships.Add(new Spaceship(rings, 2, 5));
-            spaceships.Add(new Spaceship(rings, 3, 5));
-            spaceships.Add(new Spaceship(rings, 4, 5));
-            spaceships.Add(new Spaceship(rings, 5, 5));
+            spaceships.Add(new Spaceship(rings, 1, 8));
+            spaceships.Add(new Spaceship(rings, 2, 8));
+            spaceships.Add(new Spaceship(rings, 3, 8));
+            spaceships.Add(new Spaceship(rings, 4, 8));
+            spaceships.Add(new Spaceship(rings, 5, 8));
+            spaceships.Add(new Spaceship(rings, 6, 8));
+            spaceships.Add(new Spaceship(rings, 7, 8));
+            spaceships.Add(new Spaceship(rings, 8, 8));
+
+            foreach (Spaceship spaceship in spaceships)
+            {
+                indicators.Add(new Indicator(spaceship.shipNumber, spaceship.color));
+            }
         }
 
         protected override void UnloadContent()
@@ -95,6 +104,13 @@ namespace LudumDare38
                 }
             }
 
+            //Update the display information based off the spaceships
+            foreach(Indicator indicator in indicators)
+            {
+                indicator.Update(spaceships[indicator.indicatorNumber - 1]);
+            }
+
+            //Update the background
             background.Update();
 
             //Spawn and despawn boosts
@@ -153,6 +169,7 @@ namespace LudumDare38
             //Start the spritebatch with a pixel perfect 'shader'
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null);
 
+            //Draw the background of the game
             background.Draw(spriteBatch);
 
             //Draw all of the rings
@@ -171,6 +188,12 @@ namespace LudumDare38
             foreach (Spaceship spaceship in spaceships)
             {
                 spaceship.Draw(spriteBatch);
+            }
+
+            //Draw the indicators for the players
+            foreach (Indicator indicator in indicators)
+            {
+                indicator.Draw(spriteBatch);
             }
 
             spriteBatch.End();
