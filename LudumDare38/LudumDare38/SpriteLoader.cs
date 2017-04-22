@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,25 @@ namespace LudumDare38
 {
     public class SpriteLoader
     {
-
+        //Itself
         private static SpriteLoader loader;
 
-        public Dictionary<string, Texture2D> sprites = new Dictionary<string, Texture2D>();
+        //The sprites for the game
+        //The size of thw indow
+        public Dictionary<string, Texture2D> Sprites = new Dictionary<string, Texture2D>();
+        public Vector2 WindowSize;
         
         private SpriteLoader()
         {
-
         }
 
+        //Get the size of the window
+        public void SetWindowSize(GraphicsDevice graphics)
+        {
+            WindowSize = new Vector2(graphics.PresentationParameters.Bounds.Width, graphics.PresentationParameters.Bounds.Height);
+        }
+
+        //Make sure only one spriteloader is created
         public static SpriteLoader Loader
         {
             get { if (loader == null) { loader = new SpriteLoader(); } return loader; }
@@ -27,8 +37,10 @@ namespace LudumDare38
 
         public void LoadSprites(ContentManager content)
         {
-            sprites.Add("world", content.Load<Texture2D>("Planet"));
-            sprites.Add("circle", content.Load<Texture2D>("Circle"));
+            //Add the sprites to the dictionary
+            Sprites.Add("world", content.Load<Texture2D>("Planet"));
+            Sprites.Add("circle", content.Load<Texture2D>("Circle"));
+            Sprites.Add("spaceship", content.Load<Texture2D>("Spaceship"));
         }
     }
 }

@@ -10,6 +10,9 @@ namespace LudumDare38
 {
     class Center
     {
+        /// <summary>
+        /// !!!THIS WILL BE REMOVED AND REPLACED BY ANOTHER CLASS!!!
+        /// </summary>
 
         SpriteLoader spriteLoader = SpriteLoader.Loader;
 
@@ -18,25 +21,25 @@ namespace LudumDare38
 
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            int centerX = graphics.PresentationParameters.Bounds.Width / 2;
-            int centerY = graphics.PresentationParameters.Bounds.Height / 2;
+            int centerX = (int)spriteLoader.WindowSize.X / 2;
+            int centerY = (int)spriteLoader.WindowSize.Y / 2;
 
-            int Scale = (int)(graphics.PresentationParameters.Bounds.Height / 4.5f);
+            int scale = (int)(spriteLoader.WindowSize.Y / 4.5f);
 
-            spriteBatch.Draw(spriteLoader.sprites["world"], new Rectangle(centerX - Scale / 2, centerY - Scale / 2, Scale, Scale), Color.White);
+            spriteBatch.Draw(spriteLoader.Sprites["world"], new Rectangle(centerX - scale / 2, centerY - scale / 2, scale, scale), Color.White);
 
-            Scale = Scale * 2;
-            spriteBatch.Draw(spriteLoader.sprites["circle"], new Rectangle(centerX - Scale / 2, centerY - Scale / 2, Scale, Scale), Color.White);
+            scale = scale * 2;
+            spriteBatch.Draw(spriteLoader.Sprites["circle"], new Rectangle(centerX - scale / 2, centerY - scale / 2, scale, scale), Color.White);
 
-            Scale = Scale = (int)(graphics.PresentationParameters.Bounds.Height / 4.5f);
-            Scale = Scale * 3;
-            spriteBatch.Draw(spriteLoader.sprites["circle"], new Rectangle(centerX - Scale / 2, centerY - Scale / 2, Scale, Scale), Color.White);
+            scale = (int)(spriteLoader.WindowSize.Y / 4.5f);
+            scale = scale * 3;
+            spriteBatch.Draw(spriteLoader.Sprites["circle"], new Rectangle(centerX - scale / 2, centerY - scale / 2, scale, scale), Color.White);
 
-            Scale = Scale = (int)(graphics.PresentationParameters.Bounds.Height / 4.5f);
-            Scale = Scale * 4;
-            spriteBatch.Draw(spriteLoader.sprites["circle"], new Rectangle(centerX - Scale / 2, centerY - Scale / 2, Scale, Scale), Color.White);
+            scale = (int)(spriteLoader.WindowSize.Y / 4.5f);
+            scale = scale * 4;
+            spriteBatch.Draw(spriteLoader.Sprites["circle"], new Rectangle(centerX - scale / 2, centerY - scale / 2, scale, scale), Color.White);
         }
     }
 }
