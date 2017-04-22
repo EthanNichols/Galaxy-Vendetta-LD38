@@ -19,7 +19,9 @@ namespace LudumDare38
         //The ring that the spaceship it on
         //The speed the spaceship is going
         public float rotation { get; set; }
-        public int orbitRing { get; set; }
+        public int currentRing { get; set; }
+        public int movementRing { get; set; }
+        public float offset { get; set; }
         public float currentSpeed { get; set; }
         public float maxSpeed { get; set; }
 
@@ -40,7 +42,8 @@ namespace LudumDare38
         {
             //Set information about the spaceship
             rotation = (360 / spaceships) * spaceshipNum;
-            orbitRing = (rings.Count + 1) / 2;
+            currentRing = (rings.Count + 1) / 2;
+            movementRing = currentRing;
             currentSpeed = 0;
             maxSpeed = 1;
             points = 0;
@@ -105,18 +108,41 @@ namespace LudumDare38
         public void Update(List<Ring> rings)
         {
             //All the rings that the spaceship can be on
-            Ring ring = rings[orbitRing - 1];
-
+            Ring ring = rings[currentRing - 1];
+            Ring moveToRing = rings[movementRing - 1];
             //Calculate the size of the spaceship
             int size = (int)(spriteLoader.WindowSize.Y / (rings.Count() * 5));
+
+            if (ring.size < moveToRing.size)
+            {
+                offset += currentSpeed * 15;
+
+                if ((ring.size + offset - 2) / 2 > moveToRing.size / 2)
+                {
+                    currentRing = movementRing;
+                    offset = 0;
+                    ring = rings[currentRing - 1];
+                }
+
+            } else if (ring.size > moveToRing.size)
+            {
+                offset -= currentSpeed * 15;
+
+                if ((ring.size + offset - 2) / 2 < moveToRing.size / 2)
+                {
+                    currentRing = movementRing;
+                    offset = 0;
+                    ring = rings[currentRing - 1];
+                }
+            }
 
             //Calulate the center of the screen
             //Calculate the position of the spaceship on the ring
             //Calculate the actual position of the spaceship
             int centerX = (int)spriteLoader.WindowSize.X / 2;
             int centerY = (int)spriteLoader.WindowSize.Y / 2;
-            int circleX = (int)(ring.size / 2 * Math.Cos(rotation * (Math.PI / 180)));
-            int circleY = (int)(ring.size / 2 * Math.Sin(rotation * (Math.PI / 180)));
+            int circleX = (int)((ring.size + offset) / 2 * Math.Cos(rotation * (Math.PI / 180)));
+            int circleY = (int)((ring.size + offset) / 2 * Math.Sin(rotation * (Math.PI / 180)));
             int xPos = centerX - size / 2 + circleX;
             int yPos = centerY - size / 2 + circleY;
 
@@ -125,7 +151,7 @@ namespace LudumDare38
 
             //TEMPERARY
             //Increase the rotation location of the spaceship
-            rotation += currentSpeed / orbitRing;
+            rotation += currentSpeed / currentRing;
 
             //TEMPERARY
             //Reset the rotation to avoid bit overflow
@@ -138,11 +164,11 @@ namespace LudumDare38
             //Increase/Decrease the current speed towards the max speed
             if (currentSpeed < maxSpeed)
             {
-                currentSpeed += .01f;
+                currentSpeed += .1f;
             }
             else if (currentSpeed > maxSpeed)
             {
-                currentSpeed -= .05f;
+                currentSpeed /= (maxSpeed + .1f);
             }
 
             //If the current speed is relativly close to the max speed
@@ -163,20 +189,21 @@ namespace LudumDare38
             KeyboardState keystate = Keyboard.GetState();
 
             //Test if the previous keyboard state is different from the current one
-            if (previousState != keystate)
+            if (previousState != keystate &&
+                currentRing == movementRing)
             {
                 //Test if the 'in' or 'out' movement key is pressed
                 //Make sure the spaceship will be on a ring
                 //Move the spaceship to the new ring
                 if (keystate.IsKeyDown(moveOut) &&
-                    orbitRing < rings.Count)
+                    currentRing < rings.Count)
                 {
-                    orbitRing++;
+                    movementRing++;
                 }
                 else if (keystate.IsKeyDown(moveIn) &&
-                  orbitRing > 1)
+                  currentRing > 1)
                 {
-                    orbitRing--;
+                    movementRing--;
                 }
             }
 

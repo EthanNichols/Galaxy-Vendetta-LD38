@@ -44,6 +44,7 @@ namespace LudumDare38
             Sprites.Add("maxSpeed", content.Load<Texture2D>("MaxSpeed"));
             Sprites.Add("speedBoost", content.Load<Texture2D>("SpeedBoost"));
             Sprites.Add("stopBoost", content.Load<Texture2D>("StopBoost"));
+            Sprites.Add("starAnimation", content.Load<Texture2D>("StarAnimation"));
         }
     }
 }

@@ -33,7 +33,8 @@ namespace LudumDare38
         {
             maxSpeed,
             stop,
-            speedBoost
+            speedBoost,
+            pointBoost
         }
 
         public Boost(List<Ring> rings, Random random)
@@ -88,10 +89,10 @@ namespace LudumDare38
                             spaceship.maxSpeed += .1f;
                             break;
                         case BoostType.speedBoost:
-                            spaceship.currentSpeed *= 2;
+                            spaceship.currentSpeed *= 5;
                             break;
                         case BoostType.stop:
-                            spaceship.currentSpeed = 0;
+                            spaceship.currentSpeed = -.2f;
                             break;
                     }
                     

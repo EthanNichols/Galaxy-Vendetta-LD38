@@ -15,6 +15,7 @@ namespace LudumDare38
 
         //The sprite manager
         SpriteLoader spriteLoader = SpriteLoader.Loader;
+        Background background;
 
         //The rings around the planet
         //The spaceships that are playing
@@ -37,7 +38,7 @@ namespace LudumDare38
             //Set the screen size
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
@@ -53,6 +54,8 @@ namespace LudumDare38
             //Load the images for the game
             spriteLoader.SetWindowSize(GraphicsDevice);
             spriteLoader.LoadSprites(Content);
+
+            background = new Background();
 
             //The amount of rings that will be created around the planet
             //Create the rings and add them to the list
@@ -92,6 +95,8 @@ namespace LudumDare38
                 }
             }
 
+            background.Update();
+
             //Spawn and despawn boosts
             Boost();
 
@@ -106,7 +111,7 @@ namespace LudumDare38
                 //Spawn a new boost
                 //Reset the timer for a new boost
                 boosts.Add(new Boost(rings, random));
-                boostTimer = random.Next(3, 7);
+                boostTimer = random.Next(1, 5);
             }
             else
             {
@@ -147,6 +152,8 @@ namespace LudumDare38
 
             //Start the spritebatch with a pixel perfect 'shader'
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null);
+
+            background.Draw(spriteBatch);
 
             //Draw all of the rings
             foreach (Ring ring in rings)

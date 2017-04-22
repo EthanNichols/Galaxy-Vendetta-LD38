@@ -66,6 +66,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Background.cs" />
     <Compile Include="Boost.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Ring.cs" />
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpriteLoader.cs" />
+    <Compile Include="Star.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
