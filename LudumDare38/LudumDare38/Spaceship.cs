@@ -30,6 +30,7 @@ namespace LudumDare38
         //The amount of points the spaceship has
         //The color of the spaceship
         public int points { get; set; }
+        public int wins { get; set; }
         public Color color { get; set; }
         public List<Color> kills { get; set; }
 
@@ -124,7 +125,7 @@ namespace LudumDare38
                         {
                             spaceship.active = false;
                             points += (int)Math.Abs(currentSpeed * 100);
-                            kills.Add(spaceship.color);
+                            kills.Insert(0, spaceship.color);
                         }
                     }
                 }

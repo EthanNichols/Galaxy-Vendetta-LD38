@@ -72,7 +72,8 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Gamestate.cs" />
     <Compile Include="Indicator.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="Controls.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="Pause.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

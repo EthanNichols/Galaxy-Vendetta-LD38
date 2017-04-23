@@ -18,7 +18,8 @@ namespace LudumDare38
         Background background;
         Gamestate gamestate = new Gamestate();
         Pause pauseMenu;
-        Options optionMenu;
+        Controls optionMenu;
+        MainMenu mainMenu;
 
         //The rings around the planet
         //The spaceships that are playing
@@ -90,7 +91,8 @@ namespace LudumDare38
 
             //Create the pause and options menus
             pauseMenu = new Pause();
-            optionMenu = new Options(spaceships);
+            optionMenu = new Controls(spaceships);
+            mainMenu = new MainMenu();
         }
 
         protected override void UnloadContent()
@@ -115,9 +117,9 @@ namespace LudumDare38
                 {
                     gamestate.currentState = Gamestate.state.game;
                 }
-                else if (gamestate.currentState == Gamestate.state.options)
+                else if (gamestate.currentState == Gamestate.state.controls)
                 {
-                    gamestate.currentState = Gamestate.state.pause;
+                    gamestate.currentState = gamestate.prevState;
                 }
             }
 
@@ -155,10 +157,29 @@ namespace LudumDare38
 
                 //Get information about the indicators
                 //Set the rank to 0 and add the score to the list of scores
-                foreach (Indicator indicator in indicators)
+                switch (gamestate.winState)
                 {
-                    scores.Add(indicator.points);
-                    indicator.rank = 0;
+                    case Gamestate.winCondition.kills:
+                        foreach (Indicator indicator in indicators)
+                        {
+                            scores.Add(indicator.kills.Count);
+                            indicator.rank = 0;
+                        }
+                        break;
+                    case Gamestate.winCondition.points:
+                        foreach (Indicator indicator in indicators)
+                        {
+                            scores.Add(indicator.points);
+                            indicator.rank = 0;
+                        }
+                        break;
+                    case Gamestate.winCondition.wins:
+                        foreach (Indicator indicator in indicators)
+                        {
+                            scores.Add(indicator.wins);
+                            indicator.rank = 0;
+                        }
+                        break;
                 }
 
                 //Sort the list from smallest to largest
@@ -174,12 +195,31 @@ namespace LudumDare38
                     //Get information about the indicators
                     foreach (Indicator indicator in indicators)
                     {
-                        //Test if the indicator score is equal to the score in the list
-                        //Set the rank of the indicator relative to the current rank
-                        if (score == indicator.points &&
-                            indicator.rank == 0)
+                        switch (gamestate.winState)
                         {
-                            indicator.rank = rank;
+                            case Gamestate.winCondition.kills:
+                                if (score == indicator.kills.Count &&
+                                    indicator.rank == 0)
+                                {
+                                    indicator.rank = rank;
+                                }
+                                break;
+                            case Gamestate.winCondition.points:
+                                //Test if the indicator score is equal to the score in the list
+                                //Set the rank of the indicator relative to the current rank
+                                if (score == indicator.points &&
+                                    indicator.rank == 0)
+                                {
+                                    indicator.rank = rank;
+                                }
+                                break;
+                            case Gamestate.winCondition.wins:
+                                if (score == indicator.wins &&
+                                    indicator.rank == 0)
+                                {
+                                    indicator.rank = rank;
+                                }
+                                break;
                         }
                     }
 
@@ -216,6 +256,14 @@ namespace LudumDare38
                 //Test if the match needs to be restarted
                 if (reset)
                 {
+
+                    foreach (Spaceship spaceShip in spaceships)
+                    {
+                        if (spaceShip.active)
+                        {
+                            spaceShip.wins++;
+                        }
+                    }
                     //Reset all of the spaceships
                     foreach (Spaceship spaceship in spaceships)
                     {
@@ -249,12 +297,15 @@ namespace LudumDare38
 
             //Test if the gamestate is in the option state
             //Update the option function if the keystate is different
-            else if (gamestate.currentState == Gamestate.state.options)
+            else if (gamestate.currentState == Gamestate.state.controls)
             {
                 if (keyPress != prevState)
                 {
                     optionMenu.Update();
                 }
+            } else if (gamestate.currentState == Gamestate.state.mainMenu)
+            {
+                mainMenu.Update(this, gamestate);
             }
 
             //Set the previous state to the current key state
@@ -323,11 +374,11 @@ namespace LudumDare38
             //Draw the game when the gamestate is in these states
             if (gamestate.currentState == Gamestate.state.game ||
                 gamestate.currentState == Gamestate.state.pause ||
-                gamestate.currentState == Gamestate.state.options)
+                gamestate.currentState == Gamestate.state.controls)
             {
                 //Only draw these if the gamestate isn't in the options state
                 //This only lets the indicators to be drawn with the options menu
-                if (gamestate.currentState != Gamestate.state.options)
+                if (gamestate.currentState != Gamestate.state.controls)
                 {
                     //Draw all of the rings
                     foreach (Ring ring in rings)
@@ -363,9 +414,12 @@ namespace LudumDare38
             }
             //Test if the gamestate is in the option state
             //Draw the option menu
-            else if (gamestate.currentState == Gamestate.state.options)
+            else if (gamestate.currentState == Gamestate.state.controls)
             {
                 optionMenu.Draw(spriteBatch);
+            } else if (gamestate.currentState == Gamestate.state.mainMenu)
+            {
+                mainMenu.Draw(spriteBatch);
             }
 
             spriteBatch.End();

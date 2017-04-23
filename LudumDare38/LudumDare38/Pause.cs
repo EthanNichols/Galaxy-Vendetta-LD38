@@ -32,7 +32,7 @@ namespace LudumDare38
 
             //Add the three different buttons to the list of button in this menu
             buttons.Add(new Button(new Rectangle(x - width / 2, y - height * 2, width, height), "Main Menu"));
-            buttons.Add(new Button(new Rectangle(x - width / 2, y - (height / 2), width, height), "Options"));
+            buttons.Add(new Button(new Rectangle(x - width / 2, y - (height / 2), width, height), "Controls"));
             buttons.Add(new Button(new Rectangle(x - width / 2, y + height, width, height), "Quit"));
         }
 
@@ -101,9 +101,11 @@ namespace LudumDare38
                 {
                     case 0:
                         gamestate.currentState = Gamestate.state.mainMenu;
+                        gamestate.prevState = Gamestate.state.mainMenu;
                         break;
                     case 1:
-                        gamestate.currentState = Gamestate.state.options;
+                        gamestate.currentState = Gamestate.state.controls;
+                        gamestate.prevState = Gamestate.state.pause;
                         break;
                     case 2:
                         game.ExitGame();

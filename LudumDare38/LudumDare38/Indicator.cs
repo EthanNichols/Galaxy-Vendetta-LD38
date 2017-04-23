@@ -18,8 +18,7 @@ namespace LudumDare38
         //The amount of points the spaceship has
         //The color of the spaceship
         public int rank { get; set; }
-        public float currentSpeed { get; set; }
-        public float baseSpeed { get; set; }
+        public int wins { get; set; }
         public int points { get; set; }
         public Color color { get; set; }
         public List<Color> kills { get; set; }
@@ -55,8 +54,7 @@ namespace LudumDare38
         {
             //Set the current information based off the spaceships
             points = spaceship.points;
-            currentSpeed = spaceship.currentSpeed;
-            baseSpeed = spaceship.maxSpeed;
+            wins = spaceship.wins;
             kills = spaceship.kills;
 
             moveInKey = spaceship.moveIn.ToString();
@@ -112,8 +110,8 @@ namespace LudumDare38
 
             //Display the information about the player
             spriteBatch.DrawString(font, "Rank: " + rank, new Vector2(rectangle.X + 10, rectangle.Y + 10), Color.White);
-            spriteBatch.DrawString(font, "Points: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
-            spriteBatch.DrawString(font, "Speed: " + Math.Round(currentSpeed, 1) + "/" + Math.Round(baseSpeed, 1) + " mph", new Vector2(rectangle.X + 10, rectangle.Y + 10 + 40), Color.White);
+            spriteBatch.DrawString(font, "Wins: " + wins, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
+            spriteBatch.DrawString(font, "Score: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 40), Color.White);
             spriteBatch.DrawString(font, "Kills: " + kills.Count, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 60), Color.White);
 
             //Display the player kills with the respective color
