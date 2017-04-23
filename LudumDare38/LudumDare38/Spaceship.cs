@@ -31,6 +31,7 @@ namespace LudumDare38
         //The color of the spaceship
         public int points { get; set; }
         public Color color { get; set; }
+        public List<Color> kills { get; set; }
 
         //The key that moves the spaceship in or out
         public Keys moveIn { get; set; }
@@ -51,6 +52,7 @@ namespace LudumDare38
             maxSpeed = 3;
             points = 0;
             active = true;
+            kills = new List<Color>();
 
             moveIn = Keys.Z;
             moveOut = Keys.X;
@@ -85,6 +87,18 @@ namespace LudumDare38
             }
         }
 
+        public void Reset(List<Ring> rings, int spaceships)
+        {
+            //Reset all of the spaceships stats for a new round
+            rotation = (360 / spaceships) * shipNumber;
+            currentRing = (rings.Count + 1) / 2;
+            movementRing = currentRing;
+            currentSpeed = 0;
+            maxSpeed = 3;
+            offset = 0;
+            active = true;
+        }
+
         public void Collision(List<Spaceship> spaceships)
         {
             //Get information about all of the spaceships
@@ -106,11 +120,13 @@ namespace LudumDare38
                     {
                         active = false;
                         spaceship.points += (int)Math.Abs(spaceship.currentSpeed * 100);
+                        spaceship.kills.Add(spaceship.color);
                     }
                     else
                     {
                         spaceship.active = false;
                         points += (int)Math.Abs(currentSpeed * 100);
+                        kills.Add(spaceship.color);
                     }
                 }
             }

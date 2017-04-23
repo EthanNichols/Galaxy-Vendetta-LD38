@@ -17,10 +17,12 @@ namespace LudumDare38
 
         //The amount of points the spaceship has
         //The color of the spaceship
+        public int rank { get; set; }
         public float currentSpeed { get; set; }
         public float baseSpeed { get; set; }
         public int points { get; set; }
         public Color color { get; set; }
+        public List<Color> kills { get; set; }
 
         //Sprites
         SpriteLoader spriteLoader = SpriteLoader.Loader;
@@ -52,6 +54,7 @@ namespace LudumDare38
             points = spaceship.points;
             currentSpeed = spaceship.currentSpeed;
             baseSpeed = spaceship.maxSpeed;
+            kills = spaceship.kills;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -62,8 +65,29 @@ namespace LudumDare38
             spriteBatch.Draw(image, rectangle, color);
 
             //Display the information about the player
-            spriteBatch.DrawString(spriteLoader.font, "Points: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10), Color.White);
-            spriteBatch.DrawString(spriteLoader.font, "Speed: " + Math.Round(currentSpeed, 1) + "/" + Math.Round(baseSpeed, 1), new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
+            spriteBatch.DrawString(spriteLoader.font, "Rank: " + rank, new Vector2(rectangle.X + 10, rectangle.Y + 10), Color.White);
+            spriteBatch.DrawString(spriteLoader.font, "Points: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
+            spriteBatch.DrawString(spriteLoader.font, "Speed: " + Math.Round(currentSpeed, 1) + "/" + Math.Round(baseSpeed, 1) + " mph", new Vector2(rectangle.X + 10, rectangle.Y + 10 + 40), Color.White);
+            spriteBatch.DrawString(spriteLoader.font, "Kills: " + kills.Count, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 60), Color.White);
+
+            //Display the player kills with the respective color
+            int killNum = 0;
+            foreach (Color kill in kills)
+            {
+                if (killNum < 15)
+                {
+                    spriteBatch.Draw(spriteLoader.Sprites["spaceship"], new Rectangle(rectangle.X + 10 + 15 * killNum, rectangle.Y + 10 + 80 + 15 * (killNum / 15), 10, 10), kill);
+                } else if (killNum < 30)
+                {
+                    spriteBatch.Draw(spriteLoader.Sprites["spaceship"], new Rectangle(rectangle.X + 10 + 15 * (killNum - 15), rectangle.Y + 10 + 80 + 15, 10, 10), kill);
+                } else if (killNum < 45)
+                {
+                    spriteBatch.Draw(spriteLoader.Sprites["spaceship"], new Rectangle(rectangle.X + 10 + 15 * (killNum - 30), rectangle.Y + 10 + 80 + 30, 10, 10), kill);
+                } 
+
+                //Increase the kill number to draw the sprite in the right position
+                killNum++;
+            }
         }
     }
 }
