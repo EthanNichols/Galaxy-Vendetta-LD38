@@ -24,6 +24,9 @@ namespace LudumDare38
         public Color color { get; set; }
         public List<Color> kills { get; set; }
 
+        public string moveInKey { get; set; }
+        public string moveOutKey { get; set; }
+
         //Sprites
         SpriteLoader spriteLoader = SpriteLoader.Loader;
 
@@ -55,20 +58,63 @@ namespace LudumDare38
             currentSpeed = spaceship.currentSpeed;
             baseSpeed = spaceship.maxSpeed;
             kills = spaceship.kills;
+
+            moveInKey = spaceship.moveIn.ToString();
+            moveOutKey = spaceship.moveOut.ToString();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             //Set the image of the indicator
+            //The font
             //Draw the indicator
             Texture2D image = spriteLoader.Sprites["playerInfo"];
+            SpriteFont font = spriteLoader.font;
             spriteBatch.Draw(image, rectangle, color);
 
+            //The image for the button controls
+            //The size of the button controls indicator
+            image = spriteLoader.Sprites["buttonControl"];
+            int size = rectangle.Height / 2 - 5;
+
+            //All of the indicators on the left side
+            if (indicatorNumber <= 4)
+            {
+                //Calculate the position and size of the top control button indicator
+                //Calculate the position and size of the bottom control button indicator
+                Rectangle topControl = new Rectangle(rectangle.X + rectangle.Width + 10, rectangle.Y, size, size);
+                Rectangle bottomControl = new Rectangle(rectangle.X + rectangle.Width + 10, rectangle.Y + rectangle.Height / 2 + 5, size, size);
+
+                //Draw the button control indicators
+                spriteBatch.Draw(image, topControl, color);
+                spriteBatch.Draw(image, bottomControl, color);
+
+                //Display the move in key and move out key in the respective indicators
+                spriteBatch.DrawString(font, moveInKey, new Vector2((int)(topControl.X + topControl.Width / 2 - font.MeasureString(moveInKey).X * 3 / 2), (int)(topControl.Y + topControl.Height / 2 - font.MeasureString(moveInKey).Y * 3 / 2)), Color.White, 0, Vector2.Zero, 3, SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, moveOutKey, new Vector2((int)(bottomControl.X + bottomControl.Width / 2 - font.MeasureString(moveOutKey).X * 3 / 2), (int)(bottomControl.Y + bottomControl.Height / 2 - font.MeasureString(moveOutKey).Y * 3 / 2)), Color.White, 0, Vector2.Zero, 3, SpriteEffects.None, 0);
+            }
+            //All of the indicators on the right side
+            else
+            {
+                //Calculate the position and size of the top control button indicator
+                //Calculate the position and size of the bottom control button indicator
+                Rectangle topControl = new Rectangle(rectangle.X - size - 15, rectangle.Y, rectangle.Height / 2, rectangle.Height / 2 - 5);
+                Rectangle bottomControl = new Rectangle(rectangle.X - size - 15, rectangle.Y + rectangle.Height / 2 + 5, rectangle.Height / 2, rectangle.Height / 2 - 5);
+
+                //Draw the button control indicators
+                spriteBatch.Draw(image, topControl, color);
+                spriteBatch.Draw(image, bottomControl, color);
+
+                //Display the move in key and move out key in the respective indicators
+                spriteBatch.DrawString(font, moveInKey, new Vector2((int)(topControl.X + topControl.Width / 2 - font.MeasureString(moveInKey).X * 3 / 2), (int)(topControl.Y + topControl.Height / 2 - font.MeasureString(moveInKey).Y * 3 / 2)), Color.White, 0, Vector2.Zero, 3, SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, moveOutKey, new Vector2((int)(bottomControl.X + bottomControl.Width / 2 - font.MeasureString(moveOutKey).X * 3 / 2), (int)(bottomControl.Y + bottomControl.Height / 2 - font.MeasureString(moveOutKey).Y * 3 / 2)), Color.White, 0, Vector2.Zero, 3, SpriteEffects.None, 0);
+            }
+
             //Display the information about the player
-            spriteBatch.DrawString(spriteLoader.font, "Rank: " + rank, new Vector2(rectangle.X + 10, rectangle.Y + 10), Color.White);
-            spriteBatch.DrawString(spriteLoader.font, "Points: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
-            spriteBatch.DrawString(spriteLoader.font, "Speed: " + Math.Round(currentSpeed, 1) + "/" + Math.Round(baseSpeed, 1) + " mph", new Vector2(rectangle.X + 10, rectangle.Y + 10 + 40), Color.White);
-            spriteBatch.DrawString(spriteLoader.font, "Kills: " + kills.Count, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 60), Color.White);
+            spriteBatch.DrawString(font, "Rank: " + rank, new Vector2(rectangle.X + 10, rectangle.Y + 10), Color.White);
+            spriteBatch.DrawString(font, "Points: " + points, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 20), Color.White);
+            spriteBatch.DrawString(font, "Speed: " + Math.Round(currentSpeed, 1) + "/" + Math.Round(baseSpeed, 1) + " mph", new Vector2(rectangle.X + 10, rectangle.Y + 10 + 40), Color.White);
+            spriteBatch.DrawString(font, "Kills: " + kills.Count, new Vector2(rectangle.X + 10, rectangle.Y + 10 + 60), Color.White);
 
             //Display the player kills with the respective color
             int killNum = 0;

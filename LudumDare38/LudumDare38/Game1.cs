@@ -121,6 +121,12 @@ namespace LudumDare38
                 }
             }
 
+            //Update the display information based off the spaceships
+            foreach (Indicator indicator in indicators)
+            {
+                indicator.Update(spaceships[indicator.indicatorNumber - 1]);
+            }
+
             if (gamestate.currentState == Gamestate.state.game)
             {
                 //Test if there isn't a new round happening
@@ -142,12 +148,6 @@ namespace LudumDare38
                 {
                     //Set that a new round has started
                     newRound = false;
-                }
-
-                //Update the display information based off the spaceships
-                foreach (Indicator indicator in indicators)
-                {
-                    indicator.Update(spaceships[indicator.indicatorNumber - 1]);
                 }
 
                 //List of all the scores
