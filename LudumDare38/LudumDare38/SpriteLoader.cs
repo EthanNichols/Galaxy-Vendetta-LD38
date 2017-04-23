@@ -48,6 +48,8 @@ namespace LudumDare38
             Sprites.Add("stopBoost", content.Load<Texture2D>("StopBoost"));
             Sprites.Add("starAnimation", content.Load<Texture2D>("StarAnimation"));
             Sprites.Add("playerInfo", content.Load<Texture2D>("PlayerInfo"));
+            Sprites.Add("button", content.Load<Texture2D>("Button"));
+            Sprites.Add("buttonControl", content.Load<Texture2D>("ButtonControl"));
 
             font = content.Load<SpriteFont>("ScienceFair");
         }

@@ -16,6 +16,9 @@ namespace LudumDare38
         //The sprite manager
         SpriteLoader spriteLoader = SpriteLoader.Loader;
         Background background;
+        Gamestate gamestate = new Gamestate();
+        Pause pauseMenu;
+        Options optionMenu;
 
         //The rings around the planet
         //The spaceships that are playing
@@ -28,6 +31,7 @@ namespace LudumDare38
         List<Boost> boosts = new List<Boost>();
         float boostTimer = 50;
         bool newRound = true;
+        KeyboardState prevState;
 
         //Random function
         Random random = new Random();
@@ -78,10 +82,15 @@ namespace LudumDare38
             spaceships.Add(new Spaceship(rings, 7, 8));
             spaceships.Add(new Spaceship(rings, 8, 8));
 
+            //Create an indicator for each spaceship
             foreach (Spaceship spaceship in spaceships)
             {
                 indicators.Add(new Indicator(spaceship.shipNumber, spaceship.color));
             }
+
+            //Create the pause and options menus
+            pauseMenu = new Pause();
+            optionMenu = new Options(spaceships);
         }
 
         protected override void UnloadContent()
@@ -90,124 +99,172 @@ namespace LudumDare38
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //Get the keys that are pressed
+            KeyboardState keyPress = Keyboard.GetState();
 
-            //Test if there isn't a new round happening
-            if (!newRound)
+            //Test if the escape key is pressed
+            //Change the gamestate accordingly
+            if (keyPress.IsKeyDown(Keys.Escape) &&
+                prevState != keyPress)
             {
-                //Get information about all of the spaceships
-                foreach (Spaceship spaceship in spaceships)
+                if (gamestate.currentState == Gamestate.state.game)
                 {
-                    //Test if the spaceship is active
-                    //Test for collisions
-                    if (spaceship.active)
-                    {
-                        spaceship.Update(rings);
-                        spaceship.Collision(spaceships);
-                    }
+                    gamestate.currentState = Gamestate.state.pause;
+                }
+                else if (gamestate.currentState == Gamestate.state.pause)
+                {
+                    gamestate.currentState = Gamestate.state.game;
+                }
+                else if (gamestate.currentState == Gamestate.state.options)
+                {
+                    gamestate.currentState = Gamestate.state.pause;
                 }
             }
-            else
+
+            if (gamestate.currentState == Gamestate.state.game)
             {
-                //Set that a new round has started
-                newRound = false;
-            }
+                //Test if there isn't a new round happening
+                if (!newRound)
+                {
+                    //Get information about all of the spaceships
+                    foreach (Spaceship spaceship in spaceships)
+                    {
+                        //Test if the spaceship is active
+                        //Test for collisions
+                        if (spaceship.active)
+                        {
+                            spaceship.Update(rings);
+                            spaceship.Collision(spaceships);
+                        }
+                    }
+                }
+                else
+                {
+                    //Set that a new round has started
+                    newRound = false;
+                }
 
-            //Update the display information based off the spaceships
-            foreach (Indicator indicator in indicators)
-            {
-                indicator.Update(spaceships[indicator.indicatorNumber - 1]);
-            }
-
-            //List of all the scores
-            List<int> scores = new List<int>();
-
-            //Get information about the indicators
-            //Set the rank to 0 and add the score to the list of scores
-            foreach (Indicator indicator in indicators)
-            {
-                scores.Add(indicator.points);
-                indicator.rank = 0;
-            }
-
-            //Sort the list from smallest to largest
-            //Reverse the list
-            //Start the rank at 1
-            scores.Sort();
-            scores.Reverse();
-            int rank = 1;
-
-            //Go through all of the scores
-            foreach (int score in scores)
-            {
-                //Get information about the indicators
+                //Update the display information based off the spaceships
                 foreach (Indicator indicator in indicators)
                 {
-                    //Test if the indicator score is equal to the score in the list
-                    //Set the rank of the indicator relative to the current rank
-                    if (score == indicator.points &&
-                        indicator.rank == 0)
+                    indicator.Update(spaceships[indicator.indicatorNumber - 1]);
+                }
+
+                //List of all the scores
+                List<int> scores = new List<int>();
+
+                //Get information about the indicators
+                //Set the rank to 0 and add the score to the list of scores
+                foreach (Indicator indicator in indicators)
+                {
+                    scores.Add(indicator.points);
+                    indicator.rank = 0;
+                }
+
+                //Sort the list from smallest to largest
+                //Reverse the list
+                //Start the rank at 1
+                scores.Sort();
+                scores.Reverse();
+                int rank = 1;
+
+                //Go through all of the scores
+                foreach (int score in scores)
+                {
+                    //Get information about the indicators
+                    foreach (Indicator indicator in indicators)
                     {
-                        indicator.rank = rank;
+                        //Test if the indicator score is equal to the score in the list
+                        //Set the rank of the indicator relative to the current rank
+                        if (score == indicator.points &&
+                            indicator.rank == 0)
+                        {
+                            indicator.rank = rank;
+                        }
+                    }
+
+                    //Increase the rank value
+                    rank++;
+                }
+
+                //Whether to reset the match or not
+                //The amount of spaceships alive
+                bool reset = true;
+                bool oneAlive = false;
+
+                //Get information about the spaceships
+                foreach (Spaceship spaceship in spaceships)
+                {
+                    //Test if the spaceship is active and there isn't one that is alive
+                    //Set that there is one that is alive
+                    if (spaceship.active &&
+                        !oneAlive)
+                    {
+                        oneAlive = true;
+
+                        //Test if the spaceship is active and there is one that is alive
+                        //Set that the match doesn't need to be restarted
+                    }
+                    else if (spaceship.active &&
+                      oneAlive)
+                    {
+                        reset = false;
+                        break;
                     }
                 }
 
-                //Increase the rank value
-                rank++;
+                //Test if the match needs to be restarted
+                if (reset)
+                {
+                    //Reset all of the spaceships
+                    foreach (Spaceship spaceship in spaceships)
+                    {
+                        spaceship.active = false;
+                        spaceship.Reset(rings, spaceships.Count);
+                    }
+
+                    //Clear all of the boosts on the screen
+                    //Set the next boost to spawn in 50
+                    //Set that a new round has started
+                    boosts.Clear();
+                    boostTimer = 50;
+                    newRound = true;
+                }
+
+                //Update the background
+                background.Update();
+
+                //Spawn and despawn boosts
+                Boost();
+
+                base.Update(gameTime);
             }
 
-            //Whether to reset the match or not
-            //The amount of spaceships alive
-            bool reset = true;
-            bool oneAlive = false;
-
-            //Get information about the spaceships
-            foreach (Spaceship spaceship in spaceships)
+            //Test if the gamestate is in the pause state
+            //Update the pause function
+            else if (gamestate.currentState == Gamestate.state.pause)
             {
-                //Test if the spaceship is active and there isn't one that is alive
-                //Set that there is one that is alive
-                if (spaceship.active &&
-                    !oneAlive)
-                {
-                    oneAlive = true;
-
-                    //Test if the spaceship is active and there is one that is alive
-                    //Set that the match doesn't need to be restarted
-                }
-                else if (spaceship.active &&
-                  oneAlive)
-                {
-                    reset = false;
-                    break;
-                }
+                pauseMenu.Update(this, gamestate);
             }
 
-            //Test if the match needs to be restarted
-            if (reset)
+            //Test if the gamestate is in the option state
+            //Update the option function if the keystate is different
+            else if (gamestate.currentState == Gamestate.state.options)
             {
-                //Reset all of the spaceships
-                foreach (Spaceship spaceship in spaceships)
+                if (keyPress != prevState)
                 {
-                    spaceship.active = false;
-                    spaceship.Reset(rings, spaceships.Count);
+                    optionMenu.Update();
                 }
-
-                //Clear all of the boosts on the screen
-                //Set the next boost to spawn in 50
-                //Set that a new round has started
-                boosts.Clear();
-                boostTimer = 50;
-                newRound = true;
             }
 
-            //Update the background
-            background.Update();
+            //Set the previous state to the current key state
+            prevState = keyPress;
+        }
 
-            //Spawn and despawn boosts
-            Boost();
-
-            base.Update(gameTime);
+        public void ExitGame()
+        {
+            //Exit the game
+            Exit();
         }
 
         private void Boost()
@@ -263,28 +320,52 @@ namespace LudumDare38
             //Draw the background of the game
             background.Draw(spriteBatch);
 
-            //Draw all of the rings
-            foreach (Ring ring in rings)
+            //Draw the game when the gamestate is in these states
+            if (gamestate.currentState == Gamestate.state.game ||
+                gamestate.currentState == Gamestate.state.pause ||
+                gamestate.currentState == Gamestate.state.options)
             {
-                ring.Draw(spriteBatch);
+                //Only draw these if the gamestate isn't in the options state
+                //This only lets the indicators to be drawn with the options menu
+                if (gamestate.currentState != Gamestate.state.options)
+                {
+                    //Draw all of the rings
+                    foreach (Ring ring in rings)
+                    {
+                        ring.Draw(spriteBatch);
+                    }
+
+                    //Draw all of the boosts
+                    foreach (Boost boost in boosts)
+                    {
+                        boost.Draw(spriteBatch);
+                    }
+
+                    //Draw all of the spaceships
+                    foreach (Spaceship spaceship in spaceships)
+                    {
+                        spaceship.Draw(spriteBatch);
+                    }
+                }
+
+                //Draw the indicators for the players
+                foreach (Indicator indicator in indicators)
+                {
+                    indicator.Draw(spriteBatch);
+                }
             }
 
-            //Draw all of the boosts
-            foreach (Boost boost in boosts)
+            //Test if the gamestate is in the pause state
+            //Draw the pause menu
+            if (gamestate.currentState == Gamestate.state.pause)
             {
-                boost.Draw(spriteBatch);
+                pauseMenu.Draw(spriteBatch);
             }
-
-            //Draw all of the spaceships
-            foreach (Spaceship spaceship in spaceships)
+            //Test if the gamestate is in the option state
+            //Draw the option menu
+            else if (gamestate.currentState == Gamestate.state.options)
             {
-                spaceship.Draw(spriteBatch);
-            }
-
-            //Draw the indicators for the players
-            foreach (Indicator indicator in indicators)
-            {
-                indicator.Draw(spriteBatch);
+                optionMenu.Draw(spriteBatch);
             }
 
             spriteBatch.End();

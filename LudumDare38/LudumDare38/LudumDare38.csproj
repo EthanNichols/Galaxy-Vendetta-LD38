@@ -68,8 +68,12 @@
   <ItemGroup>
     <Compile Include="Background.cs" />
     <Compile Include="Boost.cs" />
+    <Compile Include="Button.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gamestate.cs" />
     <Compile Include="Indicator.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Pause.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ring.cs" />

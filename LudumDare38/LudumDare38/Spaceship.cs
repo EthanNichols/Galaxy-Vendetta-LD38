@@ -49,15 +49,10 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 1;
+            maxSpeed = 3;
             points = 0;
             active = true;
             kills = new List<Color>();
-
-            if (shipNumber == 1)
-            {
-                maxSpeed = 10;
-            }
 
             moveIn = Keys.Z;
             moveOut = Keys.X;
@@ -99,15 +94,9 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 1;
+            maxSpeed = 3;
             offset = 0;
             active = true;
-
-            if (shipNumber == 1)
-            {
-                maxSpeed = 100;
-                currentSpeed = 100;
-            }
         }
 
         public void Collision(List<Spaceship> spaceships)
