@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace LudumDare38
         public Vector2 WindowSize;
 
         public SpriteFont font;
+        public Song song;
 
         private SpriteLoader()
         {
@@ -50,6 +52,8 @@ namespace LudumDare38
             Sprites.Add("playerInfo", content.Load<Texture2D>("PlayerInfo"));
             Sprites.Add("button", content.Load<Texture2D>("Button"));
             Sprites.Add("buttonControl", content.Load<Texture2D>("ButtonControl"));
+
+            song = content.Load<Song>("Music");
 
             font = content.Load<SpriteFont>("ScienceFair");
         }

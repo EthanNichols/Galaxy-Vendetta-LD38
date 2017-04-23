@@ -15,6 +15,7 @@ namespace LudumDare38
         //The position in the list of buttons
         List<Button> buttons = new List<Button>();
         int menuPosition = 0;
+        public bool sound { get; set; }
 
         //Sprites
         SpriteLoader spriteLoader = SpriteLoader.Loader;
@@ -24,6 +25,8 @@ namespace LudumDare38
 
         public MainMenu()
         {
+            sound = true;
+
             //The width, height and position of the button
             int width = 500;
             int height = 250;
@@ -33,7 +36,7 @@ namespace LudumDare38
             //Add the four different buttons to the list of button in this menu
             buttons.Add(new Button(new Rectangle(x - width / 2, (int)(y - height * 2), width, height), "Play Game"));
             buttons.Add(new Button(new Rectangle(x - width / 2, (int)(y - height), width, height), "Controls"));
-            buttons.Add(new Button(new Rectangle(x - width / 2, (int)(y), width, height), "Options"));
+            buttons.Add(new Button(new Rectangle(x - width / 2, (int)(y), width, height), "Sound"));
             buttons.Add(new Button(new Rectangle(x - width / 2, (int)(y + height), width, height), "Quit"));
         }
 
@@ -96,7 +99,17 @@ namespace LudumDare38
                         gamestate.prevState = Gamestate.state.mainMenu;
                         break;
                     case 2:
+                        if (sound)
+                        {
+                            sound = false;
+                        }
+                        else
+                        {
+                            sound = true;
+                            game.PlaySong();
+                        }
 
+                        Console.WriteLine(sound);
                         break;
                     case 3:
                         game.ExitGame();
@@ -128,6 +141,18 @@ namespace LudumDare38
                 else
                 {
                     spriteBatch.Draw(image, button.position, Color.White);
+                }
+
+                if (button.text.Contains("Sound"))
+                {
+                    if (sound)
+                    {
+                        button.text = "Sound: On";
+                    }
+                    else
+                    {
+                        button.text = "Sound: Off";
+                    }
                 }
 
                 //Display the text in the center of the button

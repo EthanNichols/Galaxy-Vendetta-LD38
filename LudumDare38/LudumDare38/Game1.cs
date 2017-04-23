@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -64,6 +65,8 @@ namespace LudumDare38
             spriteLoader.SetWindowSize(GraphicsDevice);
             spriteLoader.LoadSprites(Content);
 
+            MediaPlayer.Play(spriteLoader.song);
+
             background = new Background();
 
             //The amount of rings that will be created around the planet
@@ -108,10 +111,25 @@ namespace LudumDare38
         {
         }
 
+        public void PlaySong()
+        {
+            MediaPlayer.Play(spriteLoader.song);
+        }
+
         protected override void Update(GameTime gameTime)
         {
             //Get the keys that are pressed
             KeyboardState keyPress = Keyboard.GetState();
+
+            if (MediaPlayer.PlayPosition.Seconds >= 24 &&
+                mainMenu.sound)
+            {
+                MediaPlayer.Play(spriteLoader.song);
+            }
+            if (!mainMenu.sound)
+            {
+                MediaPlayer.Stop();
+            }
 
             //Test if the escape key is pressed
             //Change the gamestate accordingly
