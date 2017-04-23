@@ -22,15 +22,16 @@ namespace LudumDare38
             pause,
             controls,
             game,
-            winningScreen
+            winningScreen,
+            gameSetup
         }
 
         //The condition that determines who wins and ranks
         public enum winCondition
         {
-            kills,
-            points,
-            wins
+            Kills,
+            Points,
+            Wins
         }
 
         public Gamestate()
@@ -39,7 +40,7 @@ namespace LudumDare38
             //Set the current win condition
             currentState = state.mainMenu;
             prevState = state.mainMenu;
-            winState = winCondition.wins;
+            winState = winCondition.Points;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace LudumDare38
         Pause pauseMenu;
         Controls optionMenu;
         MainMenu mainMenu;
+        GameSetup setupMenu;
 
         //The rings around the planet
         //The spaceships that are playing
@@ -93,6 +94,12 @@ namespace LudumDare38
             pauseMenu = new Pause();
             optionMenu = new Controls(spaceships);
             mainMenu = new MainMenu();
+            setupMenu = new GameSetup();
+
+            foreach (Spaceship spaceship in spaceships)
+            {
+                spaceship.Reset(rings, setupMenu.players);
+            }
         }
 
         protected override void UnloadContent()
@@ -117,7 +124,8 @@ namespace LudumDare38
                 {
                     gamestate.currentState = Gamestate.state.game;
                 }
-                else if (gamestate.currentState == Gamestate.state.controls)
+                else if (gamestate.currentState == Gamestate.state.controls ||
+                    gamestate.currentState == Gamestate.state.gameSetup)
                 {
                     gamestate.currentState = gamestate.prevState;
                 }
@@ -126,7 +134,7 @@ namespace LudumDare38
             //Update the display information based off the spaceships
             foreach (Indicator indicator in indicators)
             {
-                indicator.Update(spaceships[indicator.indicatorNumber - 1]);
+                indicator.Update(spaceships[indicator.indicatorNumber - 1], setupMenu.players);
             }
 
             if (gamestate.currentState == Gamestate.state.game)
@@ -159,21 +167,21 @@ namespace LudumDare38
                 //Set the rank to 0 and add the score to the list of scores
                 switch (gamestate.winState)
                 {
-                    case Gamestate.winCondition.kills:
+                    case Gamestate.winCondition.Kills:
                         foreach (Indicator indicator in indicators)
                         {
                             scores.Add(indicator.kills.Count);
                             indicator.rank = 0;
                         }
                         break;
-                    case Gamestate.winCondition.points:
+                    case Gamestate.winCondition.Points:
                         foreach (Indicator indicator in indicators)
                         {
                             scores.Add(indicator.points);
                             indicator.rank = 0;
                         }
                         break;
-                    case Gamestate.winCondition.wins:
+                    case Gamestate.winCondition.Wins:
                         foreach (Indicator indicator in indicators)
                         {
                             scores.Add(indicator.wins);
@@ -197,14 +205,14 @@ namespace LudumDare38
                     {
                         switch (gamestate.winState)
                         {
-                            case Gamestate.winCondition.kills:
+                            case Gamestate.winCondition.Kills:
                                 if (score == indicator.kills.Count &&
                                     indicator.rank == 0)
                                 {
                                     indicator.rank = rank;
                                 }
                                 break;
-                            case Gamestate.winCondition.points:
+                            case Gamestate.winCondition.Points:
                                 //Test if the indicator score is equal to the score in the list
                                 //Set the rank of the indicator relative to the current rank
                                 if (score == indicator.points &&
@@ -213,7 +221,7 @@ namespace LudumDare38
                                     indicator.rank = rank;
                                 }
                                 break;
-                            case Gamestate.winCondition.wins:
+                            case Gamestate.winCondition.Wins:
                                 if (score == indicator.wins &&
                                     indicator.rank == 0)
                                 {
@@ -256,27 +264,18 @@ namespace LudumDare38
                 //Test if the match needs to be restarted
                 if (reset)
                 {
-
-                    foreach (Spaceship spaceShip in spaceships)
+                    int winAmount = setupMenu.winAmount;
+                    if (setupMenu.winCondition == "Points")
                     {
-                        if (spaceShip.active)
-                        {
-                            spaceShip.wins++;
-                        }
-                    }
-                    //Reset all of the spaceships
-                    foreach (Spaceship spaceship in spaceships)
-                    {
-                        spaceship.active = false;
-                        spaceship.Reset(rings, spaceships.Count);
+                        winAmount *= 1000;
                     }
 
-                    //Clear all of the boosts on the screen
-                    //Set the next boost to spawn in 50
-                    //Set that a new round has started
-                    boosts.Clear();
-                    boostTimer = 50;
-                    newRound = true;
+                    if (scores[0] >= winAmount)
+                    {
+                        gamestate.currentState = Gamestate.state.winningScreen;
+                    }
+
+                    Reset();
                 }
 
                 //Update the background
@@ -307,9 +306,37 @@ namespace LudumDare38
             {
                 mainMenu.Update(this, gamestate);
             }
+            else if (gamestate.currentState == Gamestate.state.gameSetup)
+            {
+                setupMenu.Update(this, gamestate);
+            }
 
             //Set the previous state to the current key state
             prevState = keyPress;
+        }
+
+        public void Reset()
+        {
+            foreach (Spaceship spaceShip in spaceships)
+            {
+                if (spaceShip.active)
+                {
+                    spaceShip.wins++;
+                }
+            }
+            //Reset all of the spaceships
+            foreach (Spaceship spaceship in spaceships)
+            {
+                spaceship.active = false;
+                spaceship.Reset(rings, setupMenu.players);
+            }
+
+            //Clear all of the boosts on the screen
+            //Set the next boost to spawn in 50
+            //Set that a new round has started
+            boosts.Clear();
+            boostTimer = 50;
+            newRound = true;
         }
 
         public void ExitGame()
@@ -420,6 +447,10 @@ namespace LudumDare38
             } else if (gamestate.currentState == Gamestate.state.mainMenu)
             {
                 mainMenu.Draw(spriteBatch);
+            }
+            else if (gamestate.currentState == Gamestate.state.gameSetup)
+            {
+                setupMenu.Draw(spriteBatch);
             }
 
             spriteBatch.End();

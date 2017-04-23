@@ -88,8 +88,8 @@ namespace LudumDare38
                 switch (menuPosition)
                 {
                     case 0:
-                        gamestate.currentState = Gamestate.state.game;
-                        gamestate.prevState = Gamestate.state.game;
+                        gamestate.currentState = Gamestate.state.gameSetup;
+                        gamestate.prevState = Gamestate.state.mainMenu;
                         break;
                     case 1:
                         gamestate.currentState = Gamestate.state.controls;
