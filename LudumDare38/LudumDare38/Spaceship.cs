@@ -49,10 +49,15 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 3;
+            maxSpeed = 1;
             points = 0;
             active = true;
             kills = new List<Color>();
+
+            if (shipNumber == 1)
+            {
+                maxSpeed = 10;
+            }
 
             moveIn = Keys.Z;
             moveOut = Keys.X;
@@ -94,9 +99,15 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 3;
+            maxSpeed = 1;
             offset = 0;
             active = true;
+
+            if (shipNumber == 1)
+            {
+                maxSpeed = 100;
+                currentSpeed = 100;
+            }
         }
 
         public void Collision(List<Spaceship> spaceships)
@@ -104,29 +115,28 @@ namespace LudumDare38
             //Get information about all of the spaceships
             foreach (Spaceship spaceship in spaceships)
             {
-
-                Rectangle shrinkCurrent = new Rectangle(rectangle.X, rectangle.Y, rectangle.Width / 2, rectangle.Height / 2);
-                Rectangle shrinkTest = new Rectangle(spaceship.rectangle.X, spaceship.rectangle.Y, spaceship.rectangle.Width / 2, spaceship.rectangle.Height / 2);
-                //Make sure the same spaceship isn't being tested
-                //Test if there is an intersection with another spaceship
-                //Make sure that spaceship is active
-                if (this != spaceship &&
-                    shrinkCurrent.Intersects(shrinkTest) &&
-                    spaceship.active)
+                //Test to make sure both spaceship are active
+                //Test to make sure they are different spaceships
+                if (active &&
+                    spaceship.active &&
+                    this != spaceship)
                 {
-                    //Test for the spaceship with more rotation
-                    //Deactivate the spaceship that is in front
-                    if (prevRotation > spaceship.rotation)
+
+                    //Test if the spaceships intersect
+                    //Test the prev and current rotation compared to the other spaceship
+                    if (rectangle.Intersects(spaceship.rectangle) &&
+                        prevRotation - 1 < spaceship.rotation &&
+                        rotation + 1 > spaceship.rotation)
                     {
-                        active = false;
-                        spaceship.points += (int)Math.Abs(spaceship.currentSpeed * 100);
-                        spaceship.kills.Add(spaceship.color);
-                    }
-                    else
-                    {
-                        spaceship.active = false;
-                        points += (int)Math.Abs(currentSpeed * 100);
-                        kills.Add(spaceship.color);
+                        //Make sure the current speed is greater than the other spaceship
+                        //Destroy the spaceship
+                        //Add points and the color of the spaceship to the kills list
+                        if (currentSpeed > spaceship.currentSpeed)
+                        {
+                            spaceship.active = false;
+                            points += (int)Math.Abs(currentSpeed * 100);
+                            kills.Add(spaceship.color);
+                        }
                     }
                 }
             }

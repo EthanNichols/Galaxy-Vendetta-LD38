@@ -61,7 +61,7 @@ namespace LudumDare38
 
             //The amount of rings that will be created around the planet
             //Create the rings and add them to the list
-            int ringAmount = 4;
+            int ringAmount = 5;
             for (int i = 0; i < ringAmount; i++)
             {
                 rings.Add(new Ring(i + 1, ringAmount));
@@ -107,7 +107,8 @@ namespace LudumDare38
                         spaceship.Collision(spaceships);
                     }
                 }
-            } else
+            }
+            else
             {
                 //Set that a new round has started
                 newRound = false;
@@ -162,7 +163,7 @@ namespace LudumDare38
             bool oneAlive = false;
 
             //Get information about the spaceships
-            foreach(Spaceship spaceship in spaceships)
+            foreach (Spaceship spaceship in spaceships)
             {
                 //Test if the spaceship is active and there isn't one that is alive
                 //Set that there is one that is alive
@@ -171,10 +172,11 @@ namespace LudumDare38
                 {
                     oneAlive = true;
 
-                //Test if the spaceship is active and there is one that is alive
-                //Set that the match doesn't need to be restarted
-                } else if (spaceship.active &&
-                    oneAlive)
+                    //Test if the spaceship is active and there is one that is alive
+                    //Set that the match doesn't need to be restarted
+                }
+                else if (spaceship.active &&
+                  oneAlive)
                 {
                     reset = false;
                     break;
@@ -187,6 +189,7 @@ namespace LudumDare38
                 //Reset all of the spaceships
                 foreach (Spaceship spaceship in spaceships)
                 {
+                    spaceship.active = false;
                     spaceship.Reset(rings, spaceships.Count);
                 }
 
