@@ -261,7 +261,7 @@ namespace LudumDare38
                         pointAmount = winAmount * 1000;
                     }
 
-                    text = button.text + ":\n" + pointAmount + " " + winCondition;
+                    text = button.text + ":" + pointAmount + " " + winCondition;
                     fontScale = 1.5f;
 
                     spriteBatch.DrawString(font, text, new Vector2(button.position.X + button.position.Width / 2 - font.MeasureString(text).X * fontScale / 2, button.position.Y + button.position.Height / 2 - font.MeasureString(text).Y * fontScale / 2), Color.White, 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);

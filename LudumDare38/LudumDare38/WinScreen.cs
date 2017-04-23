@@ -35,7 +35,7 @@ namespace LudumDare38
 
             if (timer == -10)
             {
-                timer = 300;
+                timer = 500;
             }
 
             timer--;
@@ -54,6 +54,11 @@ namespace LudumDare38
 
             Rectangle pos = new Rectangle(0, 0, 0, 0);
             List<int> ranks = new List<int>();
+
+            string congrats = "Congratualations, here are the rankings";
+            string credits = "Created for Ludum Dare 38: 'A Small World' by: Ethan Nichols";
+            spriteBatch.DrawString(font, congrats, new Vector2(centerX - font.MeasureString(congrats).X * 5 / 2, 50), Color.White, 0, Vector2.Zero, 5, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, credits, new Vector2(centerX - font.MeasureString(credits).X * 3 / 2, spriteLoader.WindowSize.Y - 75), Color.White, 0, Vector2.Zero, 3, SpriteEffects.None, 0);
 
             foreach (Indicator indicator in indicators)
             {

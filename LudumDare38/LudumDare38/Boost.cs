@@ -69,7 +69,7 @@ namespace LudumDare38
             int yPos = centerY - size / 2 + circleY;
 
             //Set the specific location of the boost
-            rectangle = new Rectangle(xPos, yPos, size, size);
+            rectangle = new Rectangle(xPos, yPos, (int)(size * 1.5f), (int)(size * 1.5f));
         }
 
         public void Collision(List<Spaceship> spaceships)
