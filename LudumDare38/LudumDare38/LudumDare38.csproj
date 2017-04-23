@@ -82,6 +82,7 @@
     <Compile Include="Spaceship.cs" />
     <Compile Include="SpriteLoader.cs" />
     <Compile Include="Star.cs" />
+    <Compile Include="WinScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

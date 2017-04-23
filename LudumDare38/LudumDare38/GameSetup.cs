@@ -200,6 +200,7 @@ namespace LudumDare38
                         game.Reset();
                         gamestate.currentState = Gamestate.state.game;
                         gamestate.prevState = Gamestate.state.game;
+                        game.ResetStats();
                         break;
                 }
             }
@@ -233,26 +234,34 @@ namespace LudumDare38
 
                 float fontScale = 2;
 
+                string text = "";
+
                 //Display the text in the center of the button
                 if (buttonNum == 0)
                 {
-                    string text = button.text + ": " + players + "/8";
+                    text = button.text + ": " + players + "/8";
                     spriteBatch.DrawString(font, text, new Vector2(button.position.X + button.position.Width / 2 - font.MeasureString(text).X * fontScale / 2, button.position.Y + button.position.Height / 2 - font.MeasureString(text).Y * fontScale / 2), Color.White, 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);
                 }
                 else if (buttonNum == 1)
                 {
-                    string text = button.text + ": " + computers + "/" + players;
+                    text = button.text + ": " + computers + "/" + players;
                     spriteBatch.DrawString(font, text, new Vector2(button.position.X + button.position.Width / 2 - font.MeasureString(text).X * fontScale / 2, button.position.Y + button.position.Height / 2 - font.MeasureString(text).Y * fontScale / 2), Color.White, 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);
                 }
                 else if (buttonNum == 2)
                 {
-                    string text = button.text + ": " + winCondition;
+                    text = button.text + ": " + winCondition;
                     spriteBatch.DrawString(font, text, new Vector2(button.position.X + button.position.Width / 2 - font.MeasureString(text).X * fontScale / 2, button.position.Y + button.position.Height / 2 - font.MeasureString(text).Y * fontScale / 2), Color.White, 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);
                 }
                 else if (buttonNum == 3)
                 {
-                    string text = button.text + ":\n";
-                    text = text + (winAmount * 1000) + " " + winCondition;
+                    int pointAmount = winAmount;
+
+                    if (winCondition == "Points")
+                    {
+                        pointAmount = winAmount * 1000;
+                    }
+
+                    text = button.text + ":\n" + pointAmount + " " + winCondition;
                     fontScale = 1.5f;
 
                     spriteBatch.DrawString(font, text, new Vector2(button.position.X + button.position.Width / 2 - font.MeasureString(text).X * fontScale / 2, button.position.Y + button.position.Height / 2 - font.MeasureString(text).Y * fontScale / 2), Color.White, 0, Vector2.Zero, fontScale, SpriteEffects.None, 0);

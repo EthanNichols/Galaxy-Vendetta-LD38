@@ -21,6 +21,7 @@ namespace LudumDare38
         Controls optionMenu;
         MainMenu mainMenu;
         GameSetup setupMenu;
+        WinScreen winScreen;
 
         //The rings around the planet
         //The spaceships that are playing
@@ -95,6 +96,7 @@ namespace LudumDare38
             optionMenu = new Controls(spaceships);
             mainMenu = new MainMenu();
             setupMenu = new GameSetup();
+            winScreen = new WinScreen(indicators);
 
             foreach (Spaceship spaceship in spaceships)
             {
@@ -309,6 +311,9 @@ namespace LudumDare38
             else if (gamestate.currentState == Gamestate.state.gameSetup)
             {
                 setupMenu.Update(this, gamestate);
+            } else if (gamestate.currentState == Gamestate.state.winningScreen)
+            {
+                winScreen.Update(indicators, gamestate);
             }
 
             //Set the previous state to the current key state
@@ -343,6 +348,14 @@ namespace LudumDare38
         {
             //Exit the game
             Exit();
+        }
+
+        public void ResetStats()
+        {
+            foreach (Spaceship spaceship in spaceships)
+            {
+                spaceship.ResetStats();
+            }
         }
 
         private void Boost()
@@ -451,6 +464,9 @@ namespace LudumDare38
             else if (gamestate.currentState == Gamestate.state.gameSetup)
             {
                 setupMenu.Draw(spriteBatch);
+            } else if (gamestate.currentState == Gamestate.state.winningScreen)
+            {
+                winScreen.Draw(spriteBatch);
             }
 
             spriteBatch.End();

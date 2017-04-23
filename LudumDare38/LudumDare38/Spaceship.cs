@@ -104,6 +104,13 @@ namespace LudumDare38
             }
         }
 
+        public void ResetStats()
+        {
+            wins = 0;
+            kills.Clear();
+            points = 0;
+        }
+
         public void Collision(List<Spaceship> spaceships)
         {
             //Get information about all of the spaceships
