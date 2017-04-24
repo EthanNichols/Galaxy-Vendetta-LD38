@@ -15,6 +15,7 @@ namespace LudumDare38
         public int shipNumber { get; set; }
         public Rectangle rectangle { get; set; }
         public bool active { get; set; }
+        public bool IsComputer { get; set; }
 
         //The rotation location of the spaceship
         //The ring that the spaceship it on
@@ -53,6 +54,7 @@ namespace LudumDare38
             maxSpeed = 3;
             points = 0;
             active = false;
+            IsComputer = false;
             kills = new List<Color>();
 
             moveIn = Keys.Z;
@@ -88,7 +90,7 @@ namespace LudumDare38
             }
         }
 
-        public void Reset(List<Ring> rings, int spaceships)
+        public void Reset(List<Ring> rings, int spaceships, int computerPlayers)
         {
             //Reset all of the spaceships stats for a new round
             rotation = (360 / spaceships) * shipNumber;
@@ -100,6 +102,14 @@ namespace LudumDare38
 
             if (shipNumber <= spaceships)
             {
+                if (shipNumber > spaceships - computerPlayers)
+                {
+                    IsComputer = true;
+                } else
+                {
+                    IsComputer = false;
+                }
+                Console.WriteLine(IsComputer);
                 active = true;
             }
         }
@@ -137,6 +147,8 @@ namespace LudumDare38
                             spaceship.active = false;
                             points += (int)Math.Abs(currentSpeed * 100);
                             kills.Insert(0, spaceship.color);
+
+                            spriteLoader.crash.Play();
                         }
                     }
                 }
@@ -214,30 +226,33 @@ namespace LudumDare38
             }
 
             //Move the spaceship to different rings
-            Move(rings);
+            Move(rings, -10);
         }
 
-        private void Move(List<Ring> rings)
+        private void Move(List<Ring> rings, int move)
         {
             //What keys are currently being pressed
             KeyboardState keystate = Keyboard.GetState();
 
-            //Test if the previous keyboard state is different from the current one
-            if (previousState != keystate &&
-                currentRing == movementRing)
+            if (!IsComputer)
             {
-                //Test if the 'in' or 'out' movement key is pressed
-                //Make sure the spaceship will be on a ring
-                //Move the spaceship to the new ring
-                if (keystate.IsKeyDown(moveOut) &&
-                    currentRing < rings.Count)
+                //Test if the previous keyboard state is different from the current one
+                if (previousState != keystate &&
+                    currentRing == movementRing)
                 {
-                    movementRing++;
-                }
-                else if (keystate.IsKeyDown(moveIn) &&
-                  currentRing > 1)
-                {
-                    movementRing--;
+                    //Test if the 'in' or 'out' movement key is pressed
+                    //Make sure the spaceship will be on a ring
+                    //Move the spaceship to the new ring
+                    if (keystate.IsKeyDown(moveOut) &&
+                        currentRing < rings.Count)
+                    {
+                        movementRing++;
+                    }
+                    else if (keystate.IsKeyDown(moveIn) &&
+                      currentRing > 1)
+                    {
+                        movementRing--;
+                    }
                 }
             }
 

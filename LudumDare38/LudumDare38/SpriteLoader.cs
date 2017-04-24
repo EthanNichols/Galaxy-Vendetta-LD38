@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -22,6 +23,7 @@ namespace LudumDare38
 
         public SpriteFont font;
         public Song song;
+        public SoundEffect crash;
 
         private SpriteLoader()
         {
@@ -54,6 +56,7 @@ namespace LudumDare38
             Sprites.Add("buttonControl", content.Load<Texture2D>("ButtonControl"));
 
             song = content.Load<Song>("Music");
+            crash = content.Load<SoundEffect>("Crash");
 
             font = content.Load<SpriteFont>("ScienceFair");
         }

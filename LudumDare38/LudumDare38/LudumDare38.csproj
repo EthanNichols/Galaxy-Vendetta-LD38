@@ -69,6 +69,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="Boost.cs" />
     <Compile Include="Button.cs" />
+    <Compile Include="ComputerPlayer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameSetup.cs" />
     <Compile Include="Gamestate.cs" />

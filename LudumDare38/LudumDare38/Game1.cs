@@ -29,6 +29,7 @@ namespace LudumDare38
         List<Ring> rings = new List<Ring>();
         List<Spaceship> spaceships = new List<Spaceship>();
         List<Indicator> indicators = new List<Indicator>();
+        List<ComputerPlayer> computers = new List<ComputerPlayer>();
 
         //List of boosts on the map
         //The amount of time between boosts spawning
@@ -94,6 +95,11 @@ namespace LudumDare38
                 indicators.Add(new Indicator(spaceship.shipNumber, spaceship.color));
             }
 
+            foreach (Spaceship spaceship in spaceships)
+            {
+                computers.Add(new ComputerPlayer(spaceship));   
+            }
+
             //Create the pause and options menus
             pauseMenu = new Pause();
             optionMenu = new Controls(spaceships);
@@ -103,7 +109,7 @@ namespace LudumDare38
 
             foreach (Spaceship spaceship in spaceships)
             {
-                spaceship.Reset(rings, setupMenu.players);
+                spaceship.Reset(rings, setupMenu.players, setupMenu.computers);
             }
         }
 
@@ -172,6 +178,11 @@ namespace LudumDare38
                             spaceship.Update(rings);
                             spaceship.Collision(spaceships);
                         }
+                    }
+
+                    foreach(ComputerPlayer computer in computers)
+                    {
+                        computer.Update(random, rings);
                     }
                 }
                 else
@@ -351,7 +362,7 @@ namespace LudumDare38
             foreach (Spaceship spaceship in spaceships)
             {
                 spaceship.active = false;
-                spaceship.Reset(rings, setupMenu.players);
+                spaceship.Reset(rings, setupMenu.players, setupMenu.computers);
             }
 
             //Clear all of the boosts on the screen

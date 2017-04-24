@@ -145,3 +145,9 @@
 /processorParam:Quality=Best
 /build:Music.mp3
 
+#begin Crash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Crash.wav
+
