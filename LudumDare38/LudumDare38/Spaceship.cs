@@ -51,7 +51,7 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 3;
+            maxSpeed = 5;
             points = 0;
             active = false;
             IsComputer = false;
@@ -97,7 +97,7 @@ namespace LudumDare38
             currentRing = (rings.Count + 1) / 2;
             movementRing = currentRing;
             currentSpeed = 0;
-            maxSpeed = 3;
+            maxSpeed = 5;
             offset = 0;
 
             if (shipNumber <= spaceships)
