@@ -49,7 +49,7 @@ namespace LudumDare38
             //Set the screen size
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
         }
 
         protected override void Initialize()
